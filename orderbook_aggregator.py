@@ -111,11 +111,11 @@ def main():
 
 
     # Secondary requests to validate the rate limiter + caching 
-    try:
-        coinbase_bids2, coinbase_asks2 = fetch_coinbase_orderbook()
-    except Exception as e:
-        print(f"Failed to fetch from Coinbase: {e}")
-        coinbase_bids2, coinbase_asks2 = [], []
+    # try:
+    #     coinbase_bids2, coinbase_asks2 = fetch_coinbase_orderbook()
+    # except Exception as e:
+    #     print(f"Failed to fetch from Coinbase: {e}")
+    #     coinbase_bids2, coinbase_asks2 = [], []
 
     try:
         gemini_bids, gemini_asks = fetch_gemini_orderbook()
@@ -123,21 +123,21 @@ def main():
         print(f"Failed to fetch from Gemini: {e}")
         gemini_bids, gemini_asks = [], []
 
-    try:
-        gemini_bids2, gemini_asks2 = fetch_gemini_orderbook()
-    except Exception as e:
-        print(f"Failed to fetch from Gemini: {e}")
-        gemini_bids2, gemini_asks2 = [], []
+    # try:
+    #     gemini_bids2, gemini_asks2 = fetch_gemini_orderbook()
+    # except Exception as e:
+    #     print(f"Failed to fetch from Gemini: {e}")
+    #     gemini_bids2, gemini_asks2 = [], []
 
-    if not (coinbase_bids or gemini_bids or coinbase_bids2 or gemini_bids2):
+    if not (coinbase_bids or gemini_bids):
         print("No bid data available from any exchange.")
         return
-    if not (coinbase_asks or gemini_asks or coinbase_asks2 or gemini_asks2):
+    if not (coinbase_asks or gemini_asks):
         print("No ask data available from any exchange.")
         return
 
 
-    all_bids, all_asks = aggregate_orderbooks([coinbase_bids, gemini_bids, coinbase_bids2, gemini_bids2], [coinbase_asks, gemini_asks, coinbase_asks2, gemini_asks2])
+    all_bids, all_asks = aggregate_orderbooks([coinbase_bids, gemini_bids], [coinbase_asks, gemini_asks])
 
     try:
         buy_cost = compute_buy_cost(all_asks, qty)
